@@ -21,7 +21,7 @@ Route::get('/', function () {
 });
 
 //route per il test
-Route::resource('test', ActivityController::class);
+Route::resource('activity', ActivityController::class);
 
 Route::middleware(['auth'])
     ->prefix('admin') //definisce il prefisso "admin/" per le rotte di questo gruppo

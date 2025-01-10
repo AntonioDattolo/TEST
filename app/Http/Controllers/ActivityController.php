@@ -83,9 +83,10 @@ class ActivityController extends Controller
             "attendes" => "required|numeric|min:5", 
             "description" => "required",
             "start" => "nullable",
-            "closed" => "required"
+            "closed" => "nullable|boolean"
         ]);
-
+        $data['closed'] = $request->has('closed') ? true : false;
+        // dd($data['closed'] );
         $activity->update($data);
 
         return redirect()->route('activity.index')->with('message', 'Activity updated');
