@@ -19,13 +19,26 @@ class ActivityController extends Controller
         $sort = $request->get('sort', 'start'); // Colonna di default è la data di inizio
 
         $direction = $request->get('direction', 'asc'); //default asc
+
+        $filter = $request->get('filter', false); // parametro per filtrare i dati (se le attività sono chiuse o meno) all di default
+        
+        if($filter == false){
+
+            $query = Activity::orderBy($sort, $direction)->paginate(10); 
+
+        }else{
+
+            $query = Activity::orderBy($sort, $direction)->where('closed', false)->paginate(10);
+        };
         
         $data =[   
-            'activity' =>Activity::orderBy($sort, $direction)->paginate(10),
+            'activity' => $query,
             'sort' => $sort,
-            'direction' => $direction
+            'direction' => $direction,
+            'filter' => $filter
         ];
 
+        // dd($filter);
         
         return view('test', $data);
     }
@@ -83,7 +96,7 @@ class ActivityController extends Controller
             "attendes" => "required|numeric|min:5", 
             "description" => "required",
             "start" => "nullable",
-            "closed" => "nullable|boolean"
+            "closed" => "nullable"
         ]);
         $data['closed'] = $request->has('closed') ? true : false;
         // dd($data['closed'] );
