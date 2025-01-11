@@ -21,12 +21,11 @@ class UserSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        if (!User::where("email", "luca@lambia.it")->first()) {
-            $mainUser = new User();
-            $mainUser->name = "Tester";
-            $mainUser->email = "Anto@Dats.it";
-            $mainUser->password = Hash::make('antosss');
-            $mainUser->save();
-        }
+        $mainUser = new User();
+        $mainUser->name = "Tester";
+        $mainUser->email = "Anto@Dats.it";
+        $mainUser->password = Hash::make('antosss');
+        $mainUser->save();
+        
     }
 }

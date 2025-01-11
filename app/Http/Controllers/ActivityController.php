@@ -48,23 +48,34 @@ class ActivityController extends Controller
      */
     public function create(Request $request)
     {
-        $data = $request->all();
-        $activity = new Activity;
-        $activity->title = $data['title'];
-        $activity->number = $data['attendes'];
-        $activity->description = $data['description'];
-        $activity->start = Carbon::now();
-        $activity->closed = false; // false di default in quanto, appena creata non puà essere conclusa yet ^^
-        $activity->save();
-        return redirect()->route('activity.index')->with('message', 'Activity Created');
+       //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreActivityRequest $request)
+    public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            "title" => "min:5",
+            "attendes" => "required|numeric|min:5", 
+            "description" => "required",
+            "start" => "nullable",
+            "closed" => "nullable"
+        ]);
+
+        $data = $request->all();
+
+        $activity = new Activity;
+        $activity->title = $data['title'];
+        $activity->attendes = $data['attendes'];
+        $activity->description = $data['description'];
+        $activity->start = $data['start'];
+        $activity->closed = false; // false di default in quanto, appena creata non puà essere conclusa yet ^^
+        
+        $activity->save();
+
+        return redirect()->route('activity.index')->with('message', 'Activity Created');
     }
 
     /**
@@ -111,6 +122,7 @@ class ActivityController extends Controller
     public function destroy(Request $request, $id)
     {
         $activity =  Activity::findOrFail($id);
+        
         $activity->delete();
 
         return redirect()->route('activity.index')->with('message', 'Activity Deleted');
